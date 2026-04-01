@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "PilotGentic Skill Manifest",
+  "type": "object",
+  "required": ["name", "skills"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Human-readable name for this skill pack"
+    },
+    "version": {
+      "type": "string",
+      "description": "Semver version of this skill pack"
+    },
+    "author": {
+      "type": "string"
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["tool", "name", "description"],
+        "properties": {
+          "tool": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$",
+            "description": "Unique tool identifier, lowercase snake_case"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name shown in Claude"
+          },
+          "description": {
+            "type": "string",
+            "description": "What this skill does — shown to the AI agent"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category for grouping (e.g. browser, productivity, dev)"
+          },
+          "tier": {
+            "type": "string",
+            "enum": ["free", "pro", "max"],
+            "default": "free"
+          },
+          "handler_url": {
+            "type": "string",
+            "format": "uri",
+            "description": "HTTP endpoint to call (GET or POST)"
+          },
+          "handler_method": {
+            "type": "string",
+            "enum": ["GET", "POST"],
+            "default": "GET"
+          },
+          "command": {
+            "type": "string",
+            "description": "Shell command to run (alternative to handler_url)"
+          },
+          "example_prompt": {
+            "type": "string",
+            "description": "Example prompt that would trigger this skill"
+          }
+        },
+        "oneOf": [
+          { "required": ["handler_url"] },
+          { "required": ["command"] }
+        ]
+      }
+    }
+  }
+}

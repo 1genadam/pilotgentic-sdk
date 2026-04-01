@@ -1,0 +1,14 @@
+{
+  "name": "Hello World",
+  "version": "1.0.0",
+  "author": "your-github-handle",
+  "skills": [{
+    "tool": "hello_world",
+    "name": "Hello World",
+    "description": "Returns a hello message. Simple example of a command-based skill.",
+    "category": "example",
+    "tier": "free",
+    "command": "echo '{\"success\": true, \"message\": \"Hello from PilotGentic!\"}'",
+    "example_prompt": "say hello"
+  }]
+}
