@@ -1,0 +1,26 @@
+{
+  "name": "REPLACE: Your Agent Name",
+  "id": "REPLACE: your-agent-id",
+  "version": "1.0.0",
+  "type": "agent",
+  "icon": "sf-person.crop.rectangle",
+  "tier": "free",
+  "description": "REPLACE: One-sentence description shown in the Agents panel",
+  "agent": {
+    "claude_agent_file": "REPLACE: your-agent-id.md"
+  },
+  "mcp_tools": [
+    "pilotgentic_screenshot",
+    "pilotgentic_ax_tree",
+    "pilotgentic_click",
+    "pilotgentic_type",
+    "pilotgentic_key",
+    "pilotgentic_launch",
+    "pilotgentic_scroll"
+  ],
+  "metadata": {
+    "target_app": "REPLACE: Target Application Name",
+    "target_url": "REPLACE: localhost:PORT or com.apple.BundleID",
+    "tags": ["REPLACE", "with", "keywords"]
+  }
+}

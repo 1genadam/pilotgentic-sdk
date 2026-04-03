@@ -1,0 +1,26 @@
+{
+  "name": "Finder Agent",
+  "id": "finder-agent",
+  "version": "1.0.0",
+  "type": "agent",
+  "icon": "sf-folder.fill",
+  "tier": "free",
+  "description": "Automates Finder file management -- navigate folders, create directories, move files, and organize the desktop.",
+  "agent": {
+    "claude_agent_file": "finder-agent.md"
+  },
+  "mcp_tools": [
+    "pilotgentic_screenshot",
+    "pilotgentic_ax_tree",
+    "pilotgentic_click",
+    "pilotgentic_type",
+    "pilotgentic_key",
+    "pilotgentic_launch",
+    "pilotgentic_scroll"
+  ],
+  "metadata": {
+    "target_app": "Finder",
+    "target_url": "com.apple.finder",
+    "tags": ["finder", "files", "folders", "desktop", "file-management"]
+  }
+}
