@@ -7,10 +7,14 @@ on:
     paths:
       - 'skill-schema.json'
       - 'examples/**'
+      - 'agents/**'
+      - 'AGENT-SPEC.md'
   pull_request:
     paths:
       - 'skill-schema.json'
       - 'examples/**'
+      - 'agents/**'
+      - 'AGENT-SPEC.md'
   workflow_dispatch:
 
 jobs:
