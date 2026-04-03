@@ -1,0 +1,14 @@
+{
+  "name": "pilotgentic-sdk",
+  "version": "1.0.0",
+  "description": "CLI tool for creating, validating, and publishing PilotGentic agent skills",
+  "type": "module",
+  "bin": {
+    "pilotgentic-sdk": "./cli/index.js"
+  },
+  "scripts": {
+    "test": "node --experimental-vm-modules cli/index.js --help"
+  },
+  "keywords": ["pilotgentic", "agent", "skill", "cli"],
+  "license": "MIT"
+}
