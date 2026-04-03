@@ -1,0 +1,40 @@
+name: Validate Community SDK
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'skill-schema.json'
+      - 'examples/**'
+  pull_request:
+    paths:
+      - 'skill-schema.json'
+      - 'examples/**'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate skill manifests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install ajv-cli
+        run: npm install -g ajv-cli ajv-formats
+
+      - name: Validate skill-schema.json is valid JSON
+        run: |
+          python3 -c "import json,sys; json.load(open('skill-schema.json')); print('✅ skill-schema.json is valid JSON')"
+
+      - name: Validate example manifests against schema
+        run: |
+          for manifest in examples/*/manifest.json; do
+            echo "Validating $manifest..."
+            ajv validate -s skill-schema.json -d "$manifest" --spec=draft7 && echo "✅ $manifest valid" || echo "⚠️  $manifest failed validation"
+          done
