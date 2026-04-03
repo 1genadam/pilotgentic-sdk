@@ -33,7 +33,7 @@ function parseToolsFromFrontmatter(fm) {
   const tools = [];
   let inTools = false;
   for (const line of lines) {
-    if (/^tools\s*:/.test(line)) { inTools = true; continue; }
+    if (/^tools\s*:/.test(line) || /^allowed-tools\s*:/.test(line)) { inTools = true; continue; }
     if (inTools) {
       const itemMatch = line.match(/^\s+-\s+(.+)$/);
       if (itemMatch) { tools.push(itemMatch[1].trim()); continue; }
@@ -106,9 +106,9 @@ export async function validatePackage(pkgPath, silent = false) {
   versionOk ? pass('version is semver', manifest.version) : fail('version is semver', `got: "${manifest.version}"`);
   if (!versionOk) allPassed = false;
 
-  // 7. type === 'agent'
-  const typeOk = manifest.type === 'agent';
-  typeOk ? pass('type is "agent"') : fail('type is "agent"', `got: "${manifest.type}"`);
+  // 7. type === 'agent' | 'skill'
+  const typeOk = manifest.type === 'agent' || manifest.type === 'skill';
+  typeOk ? pass('type is "agent" or "skill"') : fail('type is "agent" or "skill"', `got: "${manifest.type}"`);
   if (!typeOk) allPassed = false;
 
   // 8. description length
@@ -146,10 +146,10 @@ export async function validatePackage(pkgPath, silent = false) {
     const fm = parsed.frontmatter;
     const hasName = /name\s*:/.test(fm);
     const hasDesc = /description\s*:/.test(fm);
-    const hasTools = /tools\s*:/.test(fm);
+    const hasTools = /tools\s*:/.test(fm) || /allowed-tools\s*:/.test(fm);
     hasName ? pass('frontmatter has name:') : (fail('frontmatter has name:'), allPassed = false);
     hasDesc ? pass('frontmatter has description:') : (fail('frontmatter has description:'), allPassed = false);
-    hasTools ? pass('frontmatter has tools:') : (fail('frontmatter has tools:'), allPassed = false);
+    hasTools ? pass('frontmatter has tools: or allowed-tools:') : (fail('frontmatter has tools: or allowed-tools:'), allPassed = false);
 
     // 13. Tool names match allowed patterns
     if (hasTools) {
