@@ -77,24 +77,30 @@ export async function validatePackage(pkgPath, silent = false) {
     return false;
   }
 
-  // 3. Required fields
-  const requiredFields = ['name', 'id', 'version', 'type', 'description', 'agent'];
-  const missingFields = requiredFields.filter(f => !(f in manifest));
-  if (missingFields.length > 0) {
-    fail('Required fields present', `missing: ${missingFields.join(', ')}`);
+  // 3. Required fields (type-aware: agent requires 'agent' key, skill requires 'skill' key)
+  const baseRequired = ['name', 'id', 'version', 'type', 'description'];
+  const missingBase = baseRequired.filter(f => !(f in manifest));
+  if (missingBase.length > 0) {
+    fail('Required fields present', `missing: ${missingBase.join(', ')}`);
     allPassed = false;
   } else {
     pass('Required fields present');
   }
 
-  // 4. agent.claude_agent_file present
-  const agentFile = manifest?.agent?.claude_agent_file;
-  if (!agentFile) {
-    fail('agent.claude_agent_file present', 'missing from agent object');
+  // 4. type-specific file reference
+  const isSkill = manifest.type === 'skill';
+  const contentFile = isSkill
+    ? manifest?.skill?.slash_command_file
+    : manifest?.agent?.claude_agent_file;
+  const contentLabel = isSkill ? 'skill.slash_command_file' : 'agent.claude_agent_file';
+  if (!contentFile) {
+    fail(`${contentLabel} present`, `missing from ${isSkill ? 'skill' : 'agent'} object`);
     allPassed = false;
   } else {
-    pass('agent.claude_agent_file present', agentFile);
+    pass(`${contentLabel} present`, contentFile);
   }
+  // Keep backward-compat alias so checks below still work
+  const agentFile = contentFile;
 
   // 5. id matches regex
   const idOk = /^[a-z][a-z0-9-]*$/.test(manifest.id || '');
@@ -119,7 +125,7 @@ export async function validatePackage(pkgPath, silent = false) {
 
   // 9. .md file exists
   if (!agentFile) {
-    fail('.md file exists', 'cannot check — agent.claude_agent_file missing');
+    fail('.md file exists', `cannot check — ${contentLabel} missing`);
     allPassed = false;
     if (!silent) console.log('\n❌ Validation failed.\n');
     return false;
